@@ -1,5 +1,6 @@
 library(shiny)
 library(MASS)
+library(e1071)
 
 source("staticFunctions.r")
 
@@ -21,6 +22,23 @@ ui <- fluidPage(
       mainPanel(
         plotOutput("dataPlot", width = "500px", height = "500px")
       )
+    ),
+    tags$p("So, now let us try some different SVM kernels and parameters and see what they do."),
+    sidebarLayout(
+      sidebarPanel(
+        selectInput("kernel", "Type of kernel",
+                    choices = c(Linear = "linear",
+                                Polynomial = "polynomial",
+                                Radial = "radial",
+                                Sigmoid = "sigmoid")
+                    ),
+        sliderInput("degree","Polynomial degree, d", min = 2, max = 10, value = 2),
+        sliderInput("gamma", "Gamma", min = 0.2, max = 4, value = 1),
+        sliderInput("coef0", "k", min = 0, max = 10, value = 1)
+      ),
+      mainPanel(
+        plotOutput("svmPlot")
+      )
     )
 )
 
@@ -29,9 +47,9 @@ server <- function(input, output) {
   # We start by sampling the data that our SVM should be classifying, and computing its labels:
   x <- reactive(generateData(n = input$n,
                              rho = input$rho))
-  labels <- reactive(as.integer(computeDataLabels(x(), epsilon = input$epsilon)))
+  labels <- reactive(computeDataLabels(x(), epsilon = input$epsilon))
   # Of course, a plot of the generated data is nice.
-  # We of course want the plot to be square and centered around zero, so we need to compute the right x- and y-lims of the plot first:
+  # Since we want the plot to be square and centered around zero, we need to compute the right x- and y-lims of the plot first:
   dataPlotXYLim <- reactive(max(x()[,1],x()[,2],-(x()[,1]),-(x()[,2])) + 0.1)
   output$dataPlot <- renderPlot({
     plot(
@@ -47,6 +65,24 @@ server <- function(input, output) {
     abline(h = 0)
     abline(v = 0)
   })
+  
+  # Having generated the data, we can now compute our SVM and show the results.
+  # First, we package up the data and compute the SVM:
+  svmData <- reactive(data.frame(X1 = x()[,1], X2 = x()[,2], Y = as.factor(labels())))
+  fitSVM <- reactive(
+    svm(
+      Y ~ X1 + X2, # The abstract specification of the model
+      data = svmData(),
+      kernel = input$kernel,
+      degree = input$degree,
+      gamma = input$gamma,
+      coef0 = input$coef0,
+      scale = FALSE
+    )
+  )
+  # Then, we are fortunate enough that the SVM package we are using comes with a built-in
+  # function to plot an SVM, with all its data and the support vectors illustrated:
+  output$svmPlot <- renderPlot(plot(fitSVM(), data = svmData()))
 }
 
 # Run the application 

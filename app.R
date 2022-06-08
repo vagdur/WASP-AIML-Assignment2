@@ -1,4 +1,5 @@
 library(shiny)
+library(MASS)
 
 # Define UI for our application - it should essentially be a better version of a Jupyter notebook for
 # presentation.

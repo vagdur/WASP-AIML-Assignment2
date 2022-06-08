@@ -13,8 +13,10 @@ ui <- fluidPage(
     sidebarLayout(
       sidebarPanel(
         sliderInput("n","Number of points:", min = 1, max = 1000, value = 200),
-        sliderInput("rho","ρ, correlation between the points", min = 0, max = 1, value = 0),
-        sliderInput("epsilon", "ε, label error probability", min = 0, max = 0.5, value = 0)
+        sliderInput("rho","ρ, correlation between the coordinates of the points", min = 0, max = 1, value = 0),
+        "The points are drawn from a normal distribution with mean (0,0) and correlation matrix ((1,ρ),(ρ,1)).",
+        sliderInput("epsilon", "ε, label error probability", min = 0, max = 0.5, value = 0),
+        "Each points gets an incorrect label with probability ε."
       ),
       mainPanel(
         plotOutput("dataPlot", width = "500px", height = "500px")

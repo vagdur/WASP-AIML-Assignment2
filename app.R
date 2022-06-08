@@ -10,10 +10,16 @@ ui <- fluidPage(
     titlePanel("SVM, Kernels, and Non-linear Data", windowTitle = "WASP AIML Project"),
     tags$p("In this assignment, we are going to explore how Support Vector Machines (SVMs) learn non-linear data."),
     tags$p("So, first off, let us generate some data! To make it more interesting, I have included the option of varying the number of points, and having them form an ellipse instead of just a sphere (by correlating their two coordinates), and having some label noise - so we can see what these factors do to the performance of our SVMs."),
-    sliderInput("n","Number of points:", min = 1, max = 1000, value = 200),
-    sliderInput("rho","ρ, correlation between the points", min = 0, max = 1, value = 0),
-    sliderInput("epsilon", "ε, label error probability", min = 0, max = 0.5, value = 0),
-    plotOutput("dataPlot", width = "500px", height = "500px")
+    sidebarLayout(
+      sidebarPanel(
+        sliderInput("n","Number of points:", min = 1, max = 1000, value = 200),
+        sliderInput("rho","ρ, correlation between the points", min = 0, max = 1, value = 0),
+        sliderInput("epsilon", "ε, label error probability", min = 0, max = 0.5, value = 0)
+      ),
+      mainPanel(
+        plotOutput("dataPlot", width = "500px", height = "500px")
+      )
+    )
 )
 
 # Server logic specifying how the UI should work:
@@ -29,6 +35,7 @@ server <- function(input, output) {
     plot(
       x()[,1], x()[,2],
       col = labels() + 1,
+      pch = 18,
       xlim = c(-dataPlotXYLim(),dataPlotXYLim()),
       ylim = c(-dataPlotXYLim(),dataPlotXYLim()),
       xlab = "",

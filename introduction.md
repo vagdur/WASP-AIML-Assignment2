@@ -1,0 +1,3 @@
+In this assignment, we are going to explore how Support Vector Machines (SVMs) learn non-linear data.
+
+So, first off, let us generate some data! To make it more interesting, I have included the option of varying the number of points, and having them form an ellipse instead of just a sphere (by correlating their two coordinates), and having some label noise - so we can see what these factors do to the performance of our SVMs.

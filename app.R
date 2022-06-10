@@ -10,8 +10,7 @@ ui <- fluidPage(
     # Title of the page
     titlePanel("SVM, Kernels, and Non-linear Data", windowTitle = "WASP AIML Project"),
     withMathJax(),
-    tags$p("In this assignment, we are going to explore how Support Vector Machines (SVMs) learn non-linear data."),
-    tags$p("So, first off, let us generate some data! To make it more interesting, I have included the option of varying the number of points, and having them form an ellipse instead of just a sphere (by correlating their two coordinates), and having some label noise - so we can see what these factors do to the performance of our SVMs."),
+    includeMarkdown("introduction.md"),
     sidebarLayout(
       sidebarPanel(
         sliderInput("n","\\(n\\), the number of points:", min = 1, max = 1000, value = 200),
@@ -27,7 +26,7 @@ ui <- fluidPage(
         plotOutput("dataPlot", width = "500px", height = "500px")
       )
     ),
-    tags$p("So, now let us try some different SVM kernels and parameters and see what they do."),
+    includeMarkdown("interlude.md"),
     sidebarLayout(
       sidebarPanel(
         selectInput("kernel", "Type of kernel",
@@ -54,7 +53,8 @@ ui <- fluidPage(
         plotOutput("svmPlot"),
         uiOutput("svmDiagnosticText")
       )
-    )
+    ),
+    includeMarkdown("conclusions.md")
 )
 
 # Server logic specifying how the UI should work:

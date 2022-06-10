@@ -1,0 +1,1 @@
+So, now let us try some different SVM kernels and parameters and see what they do.

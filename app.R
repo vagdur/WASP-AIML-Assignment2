@@ -9,15 +9,19 @@ source("staticFunctions.r")
 ui <- fluidPage(
     # Title of the page
     titlePanel("SVM, Kernels, and Non-linear Data", windowTitle = "WASP AIML Project"),
+    withMathJax(),
     tags$p("In this assignment, we are going to explore how Support Vector Machines (SVMs) learn non-linear data."),
     tags$p("So, first off, let us generate some data! To make it more interesting, I have included the option of varying the number of points, and having them form an ellipse instead of just a sphere (by correlating their two coordinates), and having some label noise - so we can see what these factors do to the performance of our SVMs."),
     sidebarLayout(
       sidebarPanel(
-        sliderInput("n","Number of points:", min = 1, max = 1000, value = 200),
-        sliderInput("rho","ρ, correlation between the coordinates of the points", min = 0, max = 1, value = 0),
-        "The points are drawn from a normal distribution with mean (0,0) and correlation matrix ((1,ρ),(ρ,1)).",
-        sliderInput("epsilon", "ε, label error probability", min = 0, max = 0.5, value = 0),
-        "Each points gets an incorrect label with probability ε."
+        sliderInput("n","\\(n\\), the number of points:", min = 1, max = 1000, value = 200),
+        sliderInput("rho","\\(\\rho\\), correlation between the coordinates of the points", min = 0, max = 1, value = 0),
+        "The points are drawn from a normal distribution with mean \\((0,0)\\) and correlation matrix \\(\\begin{pmatrix}
+1 & \\rho \\\\
+\\rho & 1 
+\\end{pmatrix}\\).",
+        sliderInput("epsilon", "\\(\\epsilon\\), label error probability", min = 0, max = 0.5, value = 0),
+        "Each points gets an incorrect label with probability \\(\\epsilon\\)."
       ),
       mainPanel(
         plotOutput("dataPlot", width = "500px", height = "500px")

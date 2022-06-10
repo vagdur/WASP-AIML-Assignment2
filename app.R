@@ -36,9 +36,10 @@ ui <- fluidPage(
                                 Radial = "radial",
                                 Sigmoid = "sigmoid")
                     ),
-        sliderInput("degree","Polynomial degree, d", min = 2, max = 10, value = 2),
-        sliderInput("gamma", "Gamma", min = 0.2, max = 4, value = 1),
-        sliderInput("coef0", "k", min = 0, max = 10, value = 1)
+        uiOutput("kernelFormula"),
+        sliderInput("degree","Polynomial degree, \\(d\\)", min = 2, max = 10, value = 2),
+        sliderInput("gamma", "\\(\\gamma\\)", min = 0.2, max = 4, value = 1),
+        sliderInput("coef0", "\\(k\\)", min = 0, max = 10, value = 1)
       ),
       mainPanel(
         plotOutput("svmPlot")
@@ -71,6 +72,28 @@ server <- function(input, output) {
   })
   
   # Having generated the data, we can now compute our SVM and show the results.
+  # The user should get to see the form of the kernel they've picked, and putting
+  # LaTeX in the dropdown menu turned out to not work in any easy way. So we display
+  # it below the input box:
+  output$kernelFormula <- renderUI({
+    if (input$kernel == "linear") {
+      withMathJax("$$
+                  k(x,x') = \\langle x, x'\\rangle
+                  $$")
+    } else if (input$kernel == "polynomial") {
+      withMathJax("$$
+                  k(x,x') = \\left(\\gamma \\langle x, x' \\rangle + k\\right)^d
+                  $$")
+    } else if (input$kernel == "radial") {
+      withMathJax("$$
+                  k(x,x') = e^{-\\gamma \\left|x - x'\\right|^2}
+                  $$")
+    } else if (input$kernel == "sigmoid") {
+      withMathJax("$$
+                  k(x, x') = \\tanh\\left(\\gamma \\langle x, x'\\rangle + k\\right)
+                  $$")
+    }
+  })
   # First, we package up the data and compute the SVM:
   svmData <- reactive(data.frame(X1 = x()[,1], X2 = x()[,2], Y = as.factor(labels())))
   fitSVM <- reactive(

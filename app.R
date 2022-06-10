@@ -37,9 +37,18 @@ ui <- fluidPage(
                                 Sigmoid = "sigmoid")
                     ),
         uiOutput("kernelFormula"),
-        sliderInput("degree","Polynomial degree, \\(d\\)", min = 2, max = 10, value = 2),
-        sliderInput("gamma", "\\(\\gamma\\)", min = 0.2, max = 4, value = 1),
-        sliderInput("coef0", "\\(k\\)", min = 0, max = 10, value = 1)
+        conditionalPanel(
+          condition = "input.kernel == 'polynomial'",
+          sliderInput("degree","Polynomial degree, \\(d\\)", min = 2, max = 10, value = 2),
+        ),
+        conditionalPanel(
+          condition = "input.kernel != 'linear'",
+          sliderInput("gamma", "\\(\\gamma\\)", min = 0.2, max = 4, value = 1)
+        ),
+        conditionalPanel(
+          condition = "input.kernel == 'polynomial' || input.kernel == 'sigmoid'",
+          sliderInput("coef0", "\\(k\\)", min = 0, max = 10, value = 1)
+        )
       ),
       mainPanel(
         plotOutput("svmPlot")

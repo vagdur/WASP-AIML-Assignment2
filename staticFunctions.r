@@ -15,7 +15,7 @@ generateData <- function(n = 200, rho = 0) {
 computeDataLabels <- function(x, epsilon = 0) {
   # First, we sample the random noise:
   randomNoise <- sample(c(-1,1),
-                        size = length(x),
+                        size = dim(x)[1],
                         replace = TRUE,
                         prob = c(epsilon, 1 - epsilon))
   # Then, we can compute whether the two coordinates are in the same quadrant or not by just multiplying

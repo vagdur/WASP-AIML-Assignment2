@@ -15,7 +15,7 @@ ui <- fluidPage(
     sidebarLayout(
       sidebarPanel(
         sliderInput("n","\\(n\\), the number of points:", min = 1, max = 1000, value = 200),
-        sliderInput("rho","\\(\\rho\\), correlation between the coordinates of the points", min = 0, max = 1, value = 0),
+        sliderInput("rho","\\(\\rho\\), correlation between the coordinates of the points", min = -1, max = 1, value = 0),
         "The points are drawn from a normal distribution with mean \\((0,0)\\) and correlation matrix \\(\\begin{pmatrix}
 1 & \\rho \\\\
 \\rho & 1 

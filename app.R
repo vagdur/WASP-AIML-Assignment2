@@ -36,6 +36,7 @@ ui <- fluidPage(
                                 Sigmoid = "sigmoid")
                     ),
         uiOutput("kernelFormula"),
+        sliderInput("costC","\\(C\\), cost of incorrect classification", min = 0.1, max = 10, value = 1),
         conditionalPanel(
           condition = "input.kernel == 'polynomial'",
           sliderInput("degree","Polynomial degree, \\(d\\)", min = 2, max = 10, value = 2),
@@ -114,6 +115,7 @@ server <- function(input, output) {
       degree = input$degree,
       gamma = input$gamma,
       coef0 = input$coef0,
+      cost = input$costC,
       scale = FALSE
     )
   )

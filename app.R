@@ -51,7 +51,8 @@ ui <- fluidPage(
         )
       ),
       mainPanel(
-        plotOutput("svmPlot")
+        plotOutput("svmPlot"),
+        uiOutput("svmDiagnosticText")
       )
     )
 )
@@ -119,6 +120,32 @@ server <- function(input, output) {
   # Then, we are fortunate enough that the SVM package we are using comes with a built-in
   # function to plot an SVM, with all its data and the support vectors illustrated:
   output$svmPlot <- renderPlot(plot(fitSVM(), data = svmData()))
+  
+  # We also want to display some diagnostics, such as the training and test error rates, so we
+  # can see how model performance evolves:
+  trueTrainLabels <- reactive(x()[,1]*x()[,2] > 0) # The true labels of the training data, without any label noise
+  predictedTrainLabels <- reactive(predict(fitSVM(), x())) # Predicted labels of training data, according to our trained SVM
+  
+  testData <- reactive(generateData(n = 1000, rho = input$rho)) # Test data to test the SVM on
+  testLabels <- reactive(testData()[,1]*testData()[,2] > 0) # With noiseless labels
+  predictedTestLabels <- reactive(predict(fitSVM(), testData())) # and the predicted labels
+  
+  # and we create the text block containing this information, and some more:
+  output$svmDiagnosticText <- renderUI(
+    withMathJax(
+      paste0(
+        "Our fitted SVM has \\(",fitSVM()$tot.nSV,"\\) support vectors. ",
+        "The theoretically best possible accuracy with this level of label noise is ",round((1-input$epsilon)*100,1),"%.",
+        "Its training accuracy is \\(\\frac{",sum(trueTrainLabels()==predictedTrainLabels()),"}{",input$n,"} = ",
+        round(100*sum(trueTrainLabels()==predictedTrainLabels())/input$n,2),"\\%\\) compared to ground truth, and ",
+        "\\(\\frac{",sum(labels()==predictedTrainLabels()),"}{",input$n,"} = ",
+        round(100*sum(labels()==predictedTrainLabels())/input$n, 2),"\\%\\) compared with the noisy labels. ",
+        "On a test data set of \\(1000\\) data points, it has an accuracy of ",
+        "\\(\\frac{",sum(testLabels() == predictedTestLabels()),"}{1000} = ",
+        round(100*sum(testLabels() == predictedTestLabels())/1000, 2),"\\%\\)."
+      )
+    )
+  )
 }
 
 # Run the application 

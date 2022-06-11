@@ -1,1 +1,9 @@
-Some conclusions go here.
+So, having played with these settings, there are many interesting observations and conclusions that could be drawn. I will write down a smattering of the ones I found more interesting, but I am sure there are many more to be found by playing more with the options.
+
+-   In the radial kernel, increasing the value of $\gamma$ seems to increase the accuracy on the training data. However, this increase stops paying off in increased accuracy on the *testing* data at some point. This is easier to see for smaller $n$. So as can be expected, this is a parameter that needs to be tuned by means of e.g. cross-validation.
+
+-   In the polynomial kernel, increasing the degree $d$ behaves similarly -- always pays off on training data, but stops paying off on the test data after some point. Here it is quite easy to see why this should happen, since the underlying map $\Phi$ sends into a $\binom{n+d}{d}$-dimensional space, and so increasing $d$ drastically increases the dimensionality of the hypothesis space, which of course always helps on training accuracy but also enables overfitting.
+
+-   Changing the regularization parameter $C$ does indeed behave exactly like you would expect regularization to behave.
+
+-   It is very clear that none of these kernels will extrapolate well at all, just looking at the plot of the decision areas. In areas where they don't see any points, they are free to choose as they please -- so if we tried to extrapolate to a distribution with support in those areas, for example by increasing the variance of our normal distribution, our classifier will be completely wrong. This can be seen extra clearly if you pick the radial kernel with $\rho = 0.5$, where the classifier plot will look almost like a butterfly for some samples -- so if we start sampling farther away than the butterfly's wings in the second and fourth quadrant, we will be completely wrong.

@@ -1,6 +1,7 @@
 library(shiny)
 library(MASS)
 library(e1071)
+library(markdown)
 
 source("staticFunctions.r")
 

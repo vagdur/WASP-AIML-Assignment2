@@ -5,7 +5,7 @@ account: v-agdur
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6472851
-bundleId: 10104754
+bundleId: 10104767
 url: https://v-agdur.shinyapps.io/WASP-AIML-Assignment2/
 asMultiple: FALSE
 asStatic: FALSE

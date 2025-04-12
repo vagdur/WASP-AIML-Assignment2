@@ -11,7 +11,7 @@ Of course, as soon as we venture out of the domain of linearly separable data, w
 The way to do this is by introducing *slack variables* $\xi_i$ which measure how much each constraint is violated, and a *cost* or *regularization* parameter $C$. Again skipping over a lot of analysis, the resulting optimization problem is now
 
 $$
-\min_{x', b} \frac{1}{2} \lVert x' \rVert^2 + C\sum_{i=1}^n \xi_i^2, \qquad \text{ subject to: } y_i(\langle x_i, x'\rangle + b) \geq 1 \text{ and } \xi_i \geq 0, \, \forall i \in [n].
+\min_{x', b} \frac{1}{2} \lVert x' \rVert^2 + C\sum_{i=1}^n \xi_i^2, \qquad \text{ subject to: } y_i(\langle x_i, x'\rangle + b) \geq 1 - xi_i \text{ and } \xi_i \geq 0, \, \forall i \in [n].
 $$
 
 As usual in these kinds of problem, $C$ encodes the tradeoff between fitting training data perfectly and getting a model which generalises.

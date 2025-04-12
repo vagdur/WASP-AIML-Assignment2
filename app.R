@@ -138,7 +138,7 @@ server <- function(input, output) {
     withMathJax(
       paste0(
         "Our fitted SVM has \\(",fitSVM()$tot.nSV,"\\) support vectors. ",
-        "The theoretically best possible accuracy with this level of label noise is ",round((1-input$epsilon)*100,1),"%.",
+        "The theoretically best possible accuracy with this level of label noise is ",round((1-input$epsilon)*100,1),"%. ",
         "Its training accuracy is \\(\\frac{",sum(trueTrainLabels()==predictedTrainLabels()),"}{",input$n,"} = ",
         round(100*sum(trueTrainLabels()==predictedTrainLabels())/input$n,2),"\\%\\) compared to ground truth, and ",
         "\\(\\frac{",sum(labels()==predictedTrainLabels()),"}{",input$n,"} = ",
